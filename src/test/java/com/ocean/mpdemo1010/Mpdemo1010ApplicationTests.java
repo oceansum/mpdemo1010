@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,7 @@ class Mpdemo1010ApplicationTests {
     @Test
     public void addUser() {
         User user = new User();
-        user.setAge(18);
+        user.setAge(19);
         user.setEmail("123456789@123");
 //        user.setId(12L);  mp会自动生成id
 
@@ -43,12 +44,32 @@ class Mpdemo1010ApplicationTests {
     @Test
     public void update() {
         User user = new User();
-        user.setAge(18);
+        user.setAge(20);
         user.setEmail("123456789@123");
-        user.setId(1578639529147969538L);
+        user.setId(1578650477501976577L);
         user.setName("xiao");
         int i = userMapper.updateById(user);
         System.out.println("i" + i);
     }
+
+    //测试乐观锁
+    @Test
+    public void testOptimisticLocker() {
+        User user = userMapper.selectById(1578650477501976577L);
+        user.setAge(20);
+        user.setEmail("123456789@123");
+        user.setName("xiao");
+        int i = userMapper.updateById(user);
+        System.out.println("i" + i);
+    }
+
+    //多个id批量查询
+    @Test
+    public void testSelectDemo() {
+        List<User> users = userMapper.selectBatchIds(Arrays.asList(1, 2));
+        System.out.println(users);
+    }
+
+    //
 
 }
